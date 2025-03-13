@@ -124,5 +124,6 @@ saefty_pmap_df = as.data.frame(safety_pmap, col.names= c(prediction, message))
 ## Tests
 
 ```{r}
-test_dir("../tests")
+test_file("../tests/safety_test.R")
+test_file("../tests/outcome_test.R")
 ```
