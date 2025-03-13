@@ -83,18 +83,18 @@ predict_safety(20, 3)
 
 ```{r}
 
-# make another column in df to store prediction and message
+#make another column in df to store prediction and message
 predictions <- vector("numeric", length = nrow(df))
 messages <- vector("character", length = nrow(df))
 
-# Loop through each row in the dataframe
+#use for loop to pas each row in the dataframe through the function
 for (i in 1:nrow(df)) {
   result <- predict_safety(df$flow_volume[i], df$stage[i])
   predictions[i] <- result$prediction
   messages[i] <- result$message
 }
 
-# Add the results as new columns to the dataframe
+#add the results as new columns to the dataframe
 df$prediction <- predictions
 df$message <- messages
 
