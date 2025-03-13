@@ -1,0 +1,20 @@
+---
+title: "Function with Loops"
+author: "Lauren Puffer and Kaitlin Castor"
+format: html
+editor: visual
+---
+
+## Load packages
+
+```{r}
+library(tidyverse)
+library(here)
+library(janitor)
+```
+
+## Create dataframe
+
+```{r}
+df <- data.frame()
+```
