@@ -23,6 +23,10 @@ predict_safety <- function(flow_volume, stage) {
     ))
   }
   
+  #write error codes for uneven lengths of values
+  if (length(flow_volume) != length(stage)) {
+    return("Number of flow volume values is not equal to number of stage values.")
+  }
   
   # Model coefficients
   intercept <- -18.1
