@@ -103,6 +103,19 @@ df$message <- messages
 ## Graph Results
 
 ```{r}
-bar_plot <- ggplot(df, aes(x = prediction, y = #####)) + 
+#create vector with total 1's and zeros
+
+bar_plot <- ggplot(df, aes(y = prediction, color = prediction)) + 
   geom_bar()
+```
+
+## Pmap 
+
+```{r}
+#use pmap to loop with function
+safety_pmap = pmap(list(flow_volume = df$flow_volume, stage = df$stage), predict_safety)
+
+#put results in dataframe 
+saefty_pmap_df = as.data.frame(safety_pmap, col.names= c(prediction, message))
+
 ```
