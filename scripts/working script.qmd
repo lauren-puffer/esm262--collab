@@ -3,6 +3,13 @@ title: "Function with Loops"
 author: "Lauren Puffer and Kaitlin Castor"
 format: html
 editor: visual
+embed-resources: true
+code-fold: show
+execute: 
+  warning: false
+  message: false
+toc: TRUE
+theme: journal
 ---
 
 ## Load packages
@@ -78,6 +85,13 @@ predict_safety <- function(flow_volume, stage) {
 predict_safety(20, 3)
 ```
 
+## Tests
+
+```{r}
+test_file("../tests/safety_test.R")
+test_file("../tests/outcome_test.R")
+```
+
 ## For loop
 
 ```{r}
@@ -99,6 +113,26 @@ df$message <- messages
 
 ```
 
+
+## Pmap
+
+We will take the results from our pmap looping (predition and message) and store them in a data frame. This will help us to make a visualization of which proportion of hypothetical water bodies were safe (prediction = 0) and which weren't ( prediction = 1).
+
+```{r}
+#use pmap to loop with function
+safety_pmap = pmap(list(flow_volume = df$flow_volume, stage = df$stage), predict_safety)
+
+#put safety_pmap results into a dataframe with columns for message and precition 
+safety_pmap_df <- data.frame(
+  prediction = sapply(safety_pmap, `[[`, "prediction"),
+  message = sapply(safety_pmap, `[[`, "message")
+)
+
+
+print(head(safety_pmap_df))
+```
+
+
 ## Graph Results
 
 ```{r}
@@ -106,24 +140,4 @@ df$message <- messages
 
 bar_plot <- ggplot(df, aes(y = prediction, color = prediction)) + 
   geom_bar()
-```
-
-## Pmap
-
-```{r}
-#use pmap to loop with function
-safety_pmap = pmap(list(flow_volume = df$flow_volume, stage = df$stage), predict_safety)
-
-safety_pmap = as.data.frame(df, col.names = df$)
-
-#put results in dataframe 
-saefty_pmap_df = as.data.frame(safety_pmap, col.names= c(prediction, message))
-
-```
-
-## Tests
-
-```{r}
-test_file("../tests/safety_test.R")
-test_file("../tests/outcome_test.R")
 ```
