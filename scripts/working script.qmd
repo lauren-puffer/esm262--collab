@@ -22,7 +22,7 @@ stage <- runif(min=1, max=15, n=100)
 df <- data.frame(flow_volume = flow_volume, stage = stage)
 ```
 
-## Import Function (includes error checking & looping)
+## Import Function (includes error checking)
 
 ```{r}
 predict_safety <- function(flow_volume, stage) {
@@ -68,9 +68,6 @@ predict_safety <- function(flow_volume, stage) {
   return(list(prediction = prediction, message = message))
   
 }
-
-df$prediction <- prediction
-df$message <- message
 ```
 
 ## Test function
@@ -109,11 +106,13 @@ bar_plot <- ggplot(df, aes(y = prediction, color = prediction)) +
   geom_bar()
 ```
 
-## Pmap 
+## Pmap
 
 ```{r}
 #use pmap to loop with function
 safety_pmap = pmap(list(flow_volume = df$flow_volume, stage = df$stage), predict_safety)
+
+safety_pmap = as.data.frame(df, col.names = df$)
 
 #put results in dataframe 
 saefty_pmap_df = as.data.frame(safety_pmap, col.names= c(prediction, message))
