@@ -14,23 +14,15 @@ library(janitor)
 library(ggplot2)
 ```
 
-## Create data frame (includes looping)
+## Create Data Frame
 
 ```{r}
-volume <- runif(min=650, max=5000, n=100)
-
-flow_volume = 0
-nvalues = 100
-for (i in 1:nvalues) {
-  flow_volume = volume[i]/28800
-}
-flow_volume
-
+flow_volume <- runif(min=0.05, max=0.85, n=100)
 stage <- runif(min=1, max=15, n=100)
 df <- data.frame(flow_volume = flow_volume, stage = stage)
 ```
 
-## Import Function (includes error checking)
+## Import Function (includes error checking & looping)
 
 ```{r}
 predict_safety <- function(flow_volume, stage) {
@@ -53,8 +45,10 @@ predict_safety <- function(flow_volume, stage) {
   intercept <- -18.1
   velocity_coef <- 8.35
   
-  
-  velocity_ft_s <- flow_volume / stage  
+  #adding for loop (old code:velocity_ft_s <- flow_volume / stage )
+  for (n in 1:100) {
+  velocity_ft_s = df$flow_volume[n] / df$stage[n]
+}
   
   # Calculate the log-odds (linear predictor)
   log_odds <- intercept + velocity_coef * velocity_ft_s
@@ -75,10 +69,14 @@ predict_safety <- function(flow_volume, stage) {
   return(list(prediction = prediction, message = message))
   
 }
+
+df$prediction <- prediction
+df$message <- message
 ```
 
 ## Graph Results
 
 ```{r}
-ggplot()
+bar_plot <- ggplot(df, aes(x = prediction, y = #####)) + 
+  geom_bar()
 ```
