@@ -12,6 +12,8 @@ library(tidyverse)
 library(here)
 library(janitor)
 library(ggplot2)
+library(devtools)
+library(testthat)
 ```
 
 ## Create Data Frame
@@ -117,4 +119,10 @@ safety_pmap = as.data.frame(df, col.names = df$)
 #put results in dataframe 
 saefty_pmap_df = as.data.frame(safety_pmap, col.names= c(prediction, message))
 
+```
+
+## Tests
+
+```{r}
+test_dir("../tests")
 ```
