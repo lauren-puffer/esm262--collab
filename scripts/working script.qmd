@@ -17,7 +17,7 @@ library(ggplot2)
 ## Create Data Frame
 
 ```{r}
-flow_volume <- runif(min=0.05, max=0.85, n=100)
+flow_volume <- runif(min=0, max=30, n=100)
 stage <- runif(min=1, max=15, n=100)
 df <- data.frame(flow_volume = flow_volume, stage = stage)
 ```
@@ -82,10 +82,22 @@ predict_safety(20, 3)
 ## For loop
 
 ```{r}
-  #adding for loop (old code:velocity_ft_s <- flow_volume / stage )
-  for (n in 1:100) {
-  velocity_ft_s = df$flow_volume[n] / df$stage[n]
+
+# make another column in df to store prediction and message
+predictions <- vector("numeric", length = nrow(df))
+messages <- vector("character", length = nrow(df))
+
+# Loop through each row in the dataframe
+for (i in 1:nrow(df)) {
+  result <- predict_safety(df$flow_volume[i], df$stage[i])
+  predictions[i] <- result$prediction
+  messages[i] <- result$message
 }
+
+# Add the results as new columns to the dataframe
+df$prediction <- predictions
+df$message <- messages
+
 ```
 
 ## Graph Results
