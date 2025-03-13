@@ -45,10 +45,9 @@ predict_safety <- function(flow_volume, stage) {
   intercept <- -18.1
   velocity_coef <- 8.35
   
-  #adding for loop (old code:velocity_ft_s <- flow_volume / stage )
-  for (n in 1:100) {
-  velocity_ft_s = df$flow_volume[n] / df$stage[n]
-}
+  #calculate velocity  
+  velocity_ft_s <- flow_volume / stage  
+
   
   # Calculate the log-odds (linear predictor)
   log_odds <- intercept + velocity_coef * velocity_ft_s
@@ -72,6 +71,21 @@ predict_safety <- function(flow_volume, stage) {
 
 df$prediction <- prediction
 df$message <- message
+```
+
+## Test function
+
+```{r}
+predict_safety(20, 3)
+```
+
+## For loop
+
+```{r}
+  #adding for loop (old code:velocity_ft_s <- flow_volume / stage )
+  for (n in 1:100) {
+  velocity_ft_s = df$flow_volume[n] / df$stage[n]
+}
 ```
 
 ## Graph Results

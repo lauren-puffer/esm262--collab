@@ -1,0 +1,95 @@
+---
+title: "ESM 262 - Autopower loop"
+author: "Lauren Puffer and Kaitlin Castor"
+format: html
+editor: visual
+embed-resources: true
+code-fold: show
+execute: 
+  warning: false
+  message: false
+toc: TRUE
+theme: journal
+---
+
+## Load libraries
+
+```{r}
+library(purrr) #used for pmap 
+library(ggpubr)
+library(tidyverse)
+```
+
+## Bring in the function
+
+```{r}
+autopower = function( m, V, A, crolling = 0.015, Cdrag = 0.3, g = 9.8, p_air = 1.2) {
+  if (m < 0) return("Mass cannot be less than 0")
+  result = (crolling * m * g* V) + (0.5 * A * p_air * Cdrag * V**3)
+return(result) }
+```
+
+# Loop Method
+
+## Make data frame and vector
+
+```{r}
+#four possible cars df
+possible_cars = data.frame(name = c("A","B","C","D"),mass=c(10000,65000,38000,5000), area = c(22,30,22,10))
+
+mean_speed= 80*0.277
+
+#random number generator of speeds
+speed = abs(rnorm(n=250, mean=mean_speed, sd=10))
+
+```
+
+## For Loop
+
+```{r}
+power = as.data.frame(matrix(nrow=length(speed), ncol=nrow(possible_cars)))
+head(power)
+
+
+for (i in 1:ncol(power)) {
+  power[,i] = autopower(A=possible_cars$area[i], m=possible_cars$mass[i], V=speed)
+}
+head(power)
+
+#tidy data
+colnames(power)=possible_cars$name
+
+power = power %>% pivot_longer(cols=everything(), names_to="car", values_to="power")
+head(power)
+
+#visualization
+forloop_plot = ggplot(power, aes(car,power, fill=car))+geom_boxplot()+ggtitle("For Loop")
+
+print(forloop_plot)
+```
+
+```{r}
+#Pmap in Purrr package
+
+#use pmap to loop with a function
+power_pmap = pmap(list(A = possible_cars$area, m=possible_cars$mass), autopower, V=speed)
+
+#create a dataframe with power in it and the names of each car
+power_pmap_df = as.data.frame(power_pmap, col.names=possible_cars$name)
+
+#pivot longer so that we may plot the power of each car
+power_long <- power_pmap_df |>
+  pivot_longer(cols=everything(), 
+               names_to="car", 
+               values_to="power")
+
+```
+
+## Create a boxplot of power for each car
+
+```{r}
+pmap_plot = ggplot(power_long, aes(car,power, fill=car))+geom_boxplot()+ggtitle("pmap")
+
+#call it
+print(pmap_plot)
+```
