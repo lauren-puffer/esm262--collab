@@ -3,6 +3,6 @@
 
 test_that("safety-function_output_works", {
   
-  expect_length(predictions, 100)
-  expect_length(messages, 100)
+  expect_length(prediction, 100)
+  expect_length(stage, 100)
 })

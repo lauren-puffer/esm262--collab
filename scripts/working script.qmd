@@ -113,7 +113,6 @@ df$message <- messages
 
 ```
 
-
 ## Pmap
 
 We will take the results from our pmap looping (predition and message) and store them in a data frame. This will help us to make a visualization of which proportion of hypothetical water bodies were safe (prediction = 0) and which weren't ( prediction = 1).
@@ -132,12 +131,11 @@ safety_pmap_df <- data.frame(
 print(head(safety_pmap_df))
 ```
 
-
 ## Graph Results
 
 ```{r}
 #create vector with total 1's and zeros
 
-bar_plot <- ggplot(df, aes(y = prediction, color = prediction)) + 
+bar_plot <- ggplot(df, aes(y = prediction, fill = prediction)) + 
   geom_bar()
 ```
