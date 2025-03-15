@@ -3,6 +3,6 @@
 
 test_that("safety-function_output_works", {
   
-  expect_length(prediction, 100)
+  expect_length(flow_volume, 100)
   expect_length(stage, 100)
 })
