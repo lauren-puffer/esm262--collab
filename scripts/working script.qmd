@@ -135,7 +135,18 @@ print(head(safety_pmap_df))
 
 ```{r}
 #create vector with total 1's and zeros
+#ensure factors for easy color manipulation
+df$prediction <- factor(safety_pmap_df$prediction)
 
-bar_plot <- ggplot(df, aes(y = prediction, fill = prediction)) + 
-  geom_bar()
+
+bar_plot <- ggplot(df, aes(x = prediction, fill = prediction)) + 
+  geom_bar(stat = "count") + 
+  scale_fill_manual(values = c('1' = 'coral', '0' = 'skyblue'), 
+                    labels = c('1' = 'Not Safe', '0' = 'Safe')) +
+  labs(title = "Probability of Swimming Safety",
+       x = "Safety Category",
+       y = "Quantity") +
+  theme(axis.text.x = element_blank()) + 
+  geom_text(stat = 'count', aes(label = ..count..))
+bar_plot
 ```
